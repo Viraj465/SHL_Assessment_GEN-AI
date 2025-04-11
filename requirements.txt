@@ -1,0 +1,15 @@
+beautifulsoup4
+scikit-learn
+langchain
+langchain-groq
+langchain-community
+langchain-huggingface
+fastapi
+uvicorn
+pydantic
+requests
+streamlit
+faiss-cpu
+python-dotenv
+tqdm
+typing

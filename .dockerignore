@@ -1,0 +1,48 @@
+# Version Control
+.git
+.gitignore
+.gitattributes
+README.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.env
+
+# Development environments
+.vscode/
+.idea/
+*.code-workspace
+
+# React
+my-app/node_modules/
+my-app/dist
+my-app/.env
+my-app/.env.local
+my-app/.env.development.local
+my-app/.env.test.local
+my-app/.env.production.local
+my-app/npm-debug.log*
+my-app/yarn-debug.log*
+my-app/yarn-error.log*
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Docker
+Dockerfile
+.dockerignore
+
+# FAISS
+*.faiss
+vectorstore/
+
+# Misc
+.DS_Store
