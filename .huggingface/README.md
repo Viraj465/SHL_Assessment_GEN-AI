@@ -1,10 +1,11 @@
 ---
 title: SHL Assessment
-emoji: 🌍
-colorFrom: pink
-colorTo: blue
+emoji: 🚀
+colorFrom: blue
+colorTo: red
 sdk: docker
 app_port: 7860
+app_file: app.py
 pinned: false
 ---
 
