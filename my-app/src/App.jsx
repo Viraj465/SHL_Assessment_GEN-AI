@@ -1,67 +1,78 @@
-import { useState } from 'react'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
-function App() {
-  const [jobDescription, setJobDescription] = useState('')
-  const [recommendations, setRecommendations] = useState([])
-  const [loading, setLoading] = useState(false)
+const HomePage = () => {
+  const [jobDescription, setJobDescription] = useState("");
+  const [recommendation, setRecommendation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://viraj0112-shl-assessment.hf.space'
-  : 'http://localhost:7860';
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://huggingface.co/spaces/Viraj0112/SHL_Assessment"
+      : "http://localhost:7860";
 
   const handleSubmit = async (e) => {
-     e.preventDefault();
-    setLoading(true);
+    e.preventDefault(); // Prevent the default form submission
+    setLoading(true); // Set loading state to true
+
     try {
-        const response = await fetch(`${API_URL}/api/recommend`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ job_description: jobDescription }),
-        });
-        const data = await response.json();
-        setRecommendations(data);
+      const response = await fetch(`${API_URL}/api/recommend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          job_description: jobDescription,
+        }),
+      });
+      const data = await response.json();
+      setRecommendation(data.recommendation); // Set the recommendation state with the response data
     } catch (error) {
-        console.error('Error:', error);
+      console.error("Error fetching recommendation:", error);
+      setLoading(false);
     } finally {
-        setLoading(false);
+      setLoading(false); // Set loading state to false
     }
-  }
+  };
 
   return (
     <div className="container">
       <h1>SHL Assessment Recommender</h1>
       <form onSubmit={handleSubmit}>
-        <div className="input-group">
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Enter job description..."
-            required
-          />
-        </div>
+        <textarea
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+          placeholder="Enter job description here..."
+          rows="10"
+          cols="50"
+        />
         <button type="submit" disabled={loading}>
-          {loading ? 'Getting Recommendations...' : 'Get Recommendations'}
+          {loading ? "Loading..." : "Get Recommendation"}
         </button>
       </form>
-
-      {recommendations.length > 0 && (
-        <div className="results">
-          <h2>Recommended Assessments</h2>
+      {recommendation.length > 0 && (
+        <div className="recommendation">
+          <h2>Recommended Questions:</h2>
           <ul>
-            {recommendations.map((rec, index) => (
-              <li key={index}>
-                <h3>{rec.title}</h3>
-                <p>{rec.description}</p>
-              </li>
+            {recommendation.map((item, index) => (
+              <li key={index}>{item}</li>
             ))}
           </ul>
         </div>
       )}
+      {recommendation.length === 0 && !loading && (
+        <div className="no-recommendation">
+          <p>No recommendations available.</p>
+        </div>
+      )}
+      <footer>
+        <p>Developed by Viraj</p>
+        <p>Powered by Hugging Face</p>
+        <p>Version 1.0</p>
+        <p>© 2023 Viraj. All rights reserved.</p>
+      </footer>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default HomePage;

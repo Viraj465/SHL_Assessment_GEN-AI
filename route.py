@@ -14,7 +14,7 @@ class RecommendationResponse(BaseModel):
 
 @router.post("/Hello")
 async def hello_world():
-    return {"message": "Hello, World!"}
+    return {"message": "Hello, World vite + react!"}
 @router.post("/recommendations/", response_model=RecommendationResponse)
 async def get_recommendations(query: Query):
     try:
