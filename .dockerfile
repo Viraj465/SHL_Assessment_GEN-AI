@@ -32,11 +32,11 @@ WORKDIR /app
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
+ENV PORT=7860
 
 # Expose ports for both backend and frontend
-EXPOSE 8000
+EXPOSE 7860
 EXPOSE 3000
 
 # Start command
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "7860"]
