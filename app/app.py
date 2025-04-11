@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.route import router
+# from app.route import router
+from route import router
 
 app = FastAPI(
     title="SHL Assessment Recommendation System API",
