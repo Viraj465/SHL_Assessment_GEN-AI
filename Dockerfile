@@ -39,4 +39,4 @@ EXPOSE 7860
 EXPOSE 3000
 
 # Start command
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]

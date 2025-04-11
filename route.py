@@ -1,6 +1,6 @@
 from fastapi import HTTPException, APIRouter
 from pydantic import BaseModel
-from app.api.services.llmService import get_recommendations
+# from app.api.services.llmService import get_recommendations
 
 router = APIRouter()
 
