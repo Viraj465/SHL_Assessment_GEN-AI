@@ -1,7 +1,7 @@
 from fastapi import HTTPException, APIRouter
 from pydantic import BaseModel
 from typing import List, Optional, Dict
-# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 # from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -50,14 +50,14 @@ class RecommendationResponse(BaseModel):
         )
 
 try:
-    # embeddings = HuggingFaceEmbeddings(
-    #     model_name="sentence-transformers/all-MiniLM-L6-v2",
-    #     model_kwargs={'device': 'cpu'} 
-    # )
-    embeddings = SentenceTransformerEmbeddings(
-        model_name="all-MiniLM-L6-v2",
-        model_kwargs={'device': 'cpu'}
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_kwargs={'device': 'cpu'} 
     )
+    # embeddings = SentenceTransformerEmbeddings(
+    #     model_name="all-MiniLM-L6-v2",
+    #     model_kwargs={'device': 'cpu'}
+    # )
     vectorstore = FAISS.load_local(
         "app/api/data/vectorstore/shl_faiss", 
         embeddings,
