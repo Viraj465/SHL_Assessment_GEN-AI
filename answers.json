@@ -1,0 +1,85 @@
+{
+  "answer": "Based on the provided context, I would recommend the \"Professional + 7.0\" or \"Professional + 7.1\" as they are designed for non-managerial professional individual contributor positions, which includes software engineers. These solutions include assessments for tasks such as gathering requirements, analyzing data, managing projects, and producing products or services, which are relevant to a data science role.\n\nAdditionally, the communication skills aspect can be assessed through the Verify Interactive – Deductive Reasoning ability assessment, which is a part of the Professional + 7.0 and Professional + 7.1 solutions.\n\nHowever, it's worth noting that there isn't a specific solution mentioned for a data science role, so you may want to consider a more tailored solution or consult with the provider (SHL) to determine the best fit for your specific needs.",
+  "recommendations": [
+    {
+      "assessment_name": "Technology Professional 8.0 Job Focused Assessment",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/technology-professional-8-0-job-focused-assessment/",
+      "remote_support": "Yes",
+      "adaptive_support": "No",
+      "duration": "16",
+      "test_type": "Competencies,Personality&Behavior"
+    },
+    {
+      "assessment_name": "Sales Engineer Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/sales-engineer-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "61",
+      "test_type": "Ability&Aptitude,Biodata&SituationalJudgement,Knowledge&Skills,Personality&Behavior,Simulation"
+    },
+    {
+      "assessment_name": "Professional + 7.0 Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/professional-7-0-solution-3958/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "51",
+      "test_type": "Ability&Aptitude,Biodata&SituationalJudgement,Competencies"
+    },
+    {
+      "assessment_name": "Professional 7.0 Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/professional-7-0-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "No",
+      "duration": "33",
+      "test_type": "Biodata&SituationalJudgement,Competencies"
+    },
+    {
+      "assessment_name": "Professional + 7.1 (Americas)",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/professional-7-1-%28americas%29/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "56",
+      "test_type": "Biodata&SituationalJudgement,Competencies,Personality&Behavior"
+    },
+    {
+      "assessment_name": "Professional + 7.1 (International)",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/professional-7-1-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "56",
+      "test_type": "Biodata&SituationalJudgement,Competencies,Personality&Behavior"
+    },
+    {
+      "assessment_name": "General Entry Level – Data Entry 7.0 Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/general-entry-level-data-entry-7-0-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "No",
+      "duration": "24",
+      "test_type": "Biodata&SituationalJudgement,Knowledge&Skills"
+    },
+    {
+      "assessment_name": "Professional/Individual Contributor - Short Form",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/professionalindividual-contributor-short-form/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "44",
+      "test_type": "Ability&Aptitude,Biodata&SituationalJudgement,Personality&Behavior,Simulation"
+    },
+    {
+      "assessment_name": "Network Engineer/Analyst Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/network-engineeranalyst-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "41",
+      "test_type": "Ability&Aptitude,Biodata&SituationalJudgement,Knowledge&Skills,Personality&Behavior,Simulation"
+    },
+    {
+      "assessment_name": "Installation and Repair Technician Solution",
+      "url": "https://www.shl.com/solutions/products/product-catalog/view/installation-and-repair-technician-solution/",
+      "remote_support": "Yes",
+      "adaptive_support": "Yes",
+      "duration": "49",
+      "test_type": "Ability&Aptitude,Biodata&SituationalJudgement,Personality&Behavior,Simulation"
+    }
+  ]
+}
