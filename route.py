@@ -55,7 +55,7 @@ try:
     #     model_kwargs={'device': 'cpu'} 
     # )
     embeddings = SentenceTransformerEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_name="all-MiniLM-L6-v2",
         model_kwargs={'device': 'cpu'}
     )
     vectorstore = FAISS.load_local(
