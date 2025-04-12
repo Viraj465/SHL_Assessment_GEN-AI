@@ -2,10 +2,12 @@
 .git
 .gitignore
 .gitattributes
+node_modules
 README.md
 
 # Python
 __pycache__/
+*.pyc
 *.py[cod]
 *$py.class
 *.so

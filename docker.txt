@@ -1,7 +1,7 @@
 # Base image
 FROM python:3.11
 
-# Set working directory for backend
+# Set working directory
 WORKDIR /app
 
 # Install system dependencies
@@ -20,16 +20,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend files to /app
-COPY app/ ./app/
-COPY app.py route.py answers.json ./
-# COPY README.md  ./
+# Copy the entire project
+COPY . .
 
-# Copy frontend files to /my-app
+# Install frontend dependencies and build
 WORKDIR /my-app
-COPY my-app/ ./
-
-# Now build the frontend
 RUN if [ -f "package.json" ]; then \
     npm install --legacy-peer-deps && \
     npm run build; \
@@ -51,3 +46,9 @@ EXPOSE 7860
 
 # Start command
 CMD ["python", "app.py"]
+
+# Build the image
+docker build -t shlapp .
+
+# Run the container with environment variables
+docker run -p 7860:7860 --env-file .env shlapp
