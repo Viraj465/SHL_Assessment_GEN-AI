@@ -14,3 +14,5 @@ faiss-cpu
 python-dotenv
 tqdm
 typing
+sentence-transformers
+tabulate
