@@ -1,13 +1,10 @@
 from fastapi import HTTPException, APIRouter
 from pydantic import BaseModel
-from typing import List, Optional, Dict
+from typing import List,Optional
 from langchain_huggingface import HuggingFaceEmbeddings
-# from langchain.embeddings import SentenceTransformerEmbeddings
-from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq.chat_models import ChatGroq
-from langchain.chains import  RetrievalQA, ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
+from langchain.chains import  RetrievalQA
 import pandas as pd
 from dotenv import load_dotenv
 import os
@@ -50,17 +47,12 @@ class RecommendationResponse(BaseModel):
         )
 
 try:
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        model_kwargs={'device': 'cpu'} 
-    )
-    # embeddings = SentenceTransformerEmbeddings(
-    #     model_name="all-MiniLM-L6-v2",
-    #     model_kwargs={'device': 'cpu'}
-    # )
+    embedding_model = HuggingFaceEmbeddings(model_name = "sentence-transformers/all-mpnet-base-v2",
+                                        model_kwargs = {'device': 'cpu'},
+                                        encode_kwargs = {'normalize_embeddings': False})
     vectorstore = FAISS.load_local(
-        "app/api/data/vectorstore/shl_faiss", 
-        embeddings,
+        "app/api/data/FAISSvectorstore", 
+        embedding_model,
         allow_dangerous_deserialization=True
     )
     logger.info("Successfully loaded embeddings and vector store")
@@ -68,23 +60,14 @@ except Exception as e:
     logger.error(f"Error initializing embeddings or vector store: {str(e)}")
     raise
 
-memory = ConversationBufferMemory(
-    memory_key="chat_history",
-    output_key="answer",
-    return_messages=True,
-)
+llm = ChatGroq(model = "llama3-8b-8192", api_key = GROQ_API_KEY, temperature = 0.6)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 10},score_threshold = 0.6,search_type ="similarity" )
 
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    api_key=GROQ_API_KEY
-)
-
-qa = ConversationalRetrievalChain.from_llm(
-    llm=llm,
-    retriever=vectorstore.as_retriever(search_kwargs={"k": 10}),
-    memory=memory,
+QA_chain = RetrievalQA.from_chain_type(
+    llm = llm,
+    retriever=retriever,
     return_source_documents=True,
-    verbose=True
+    verbose = True
 )
 
 @router.post("/Hello")
@@ -93,30 +76,38 @@ async def hello_world():
 
 
 def format_response(response_docs):
+    """Format the documents into a structured output."""
     results = []
     for doc in response_docs:
         meta = doc.metadata
         results.append({
-            "Assessment Name": meta.get("name",""),
-            "URL": meta.get("url",""),
-            "Remote Support": meta.get("remote_support",""),
-            "Adaptive Support": meta.get("adaptive_support",""),
-            "Duration": meta.get("duration",""),
-            "Test Type": meta.get("test_type","")
+            "Assessment Name": meta.get("name", "N/A"),
+            "URL": meta.get("url", "N/A"),
+            "Remote Support": meta.get("remote_support", "N/A"),
+            "Adaptive Support": meta.get("adaptive_support", "N/A"),
+            "Duration": meta.get("duration", "N/A"),
+            "Test Type": meta.get("test_type", "N/A")
         })
-    return results[:10]
+    return results
 
 
 @router.post("/recommendations/", response_model=RecommendationResponse)
 async def get_recommendations(query: Query):
+    system_prompt = (
+    "Based on the following requirements, analyze the retrieved assessment documents and recommend "
+    "the most suitable tests that match ALL of these criteria:\n"
+    "1. Tests that cover the specific skills mentioned\n"
+    "2. Tests within the requested time constraints\n"
+    "3. Tests with appropriate remote/adaptive features if specified\n"
+    "4. Tests that matches the required job designation mentioned properly\n"
+    "Explain why each recommendation is suitable for the requirements."
+    )
     try:
         logger.debug(f"Received query: {query.query} with history: {query.history}")
-        response = qa.invoke({
-            "question":query.query,
-            "chat_history": query.history
-        })
-        logger.debug(f"Respaonse from QA: {response}")
-
+        response = QA_chain.invoke({
+        "query": system_prompt + "\n" + query.query,
+    })
+        logger.debug(f"Response from QA: {response}")
         recommendations = [
             Recommendation(
                 assessment_name=str(meta.get("name", "")),
@@ -129,11 +120,11 @@ async def get_recommendations(query: Query):
             for doc in response.get("source_documents", [])
             for meta in [doc.metadata]
         ][:10]
-
+        
         return RecommendationResponse(
-            answer = response.get("answer", ""),
-            recommendations = recommendations
-        )
+            answer=response["result"],
+            recommendations=recommendations )
+    
     except Exception as e:
         logger.error(f"Error in get_recommendations: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

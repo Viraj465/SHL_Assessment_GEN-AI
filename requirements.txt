@@ -16,3 +16,4 @@ tqdm
 typing
 sentence-transformers
 tabulate
+langchain_experimental
