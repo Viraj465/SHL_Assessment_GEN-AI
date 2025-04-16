@@ -9,7 +9,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 import logging
-
+import tempfile
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,8 +20,44 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY environment variable is not set")
+
 router = APIRouter()
 
+
+CACHE_DIR = tempfile.mkdtemp()
+os.environ['TRANSFORMERS_CACHE'] = CACHE_DIR
+os.environ['HF_HOME'] = CACHE_DIR
+
+def initialize_models():
+    try:
+        embedding_model = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-mpnet-base-v2",
+            model_kwargs={'device': 'cpu'},
+            encode_kwargs={'normalize_embeddings': False},
+        )
+        vectorstore = FAISS.load_local(
+            "app/api/data/FAISSvectorstore",
+            embedding_model,
+            allow_dangerous_deserialization=True
+        )
+        llm = ChatGroq(model="llama3-8b-8192", api_key=GROQ_API_KEY, temperature=0.6)
+        retriever = vectorstore.as_retriever(
+            search_kwargs={"k": 10},
+            score_threshold=0.6,
+            search_type="similarity"
+        )
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=llm,
+            retriever=retriever,
+            return_source_documents=True,
+            verbose=True
+        )
+        logger.info("Successfully initialized all models and chains")
+        return qa_chain
+    except Exception as e:
+        logger.error(f"Error initializing models: {str(e)}")
+        raise
+    
 class Query(BaseModel):
     query: str
     history: list = []
@@ -46,29 +82,7 @@ class RecommendationResponse(BaseModel):
             recommendations=df.to_csv(index=False)
         )
 
-try:
-    embedding_model = HuggingFaceEmbeddings(model_name = "sentence-transformers/all-mpnet-base-v2",
-                                        model_kwargs = {'device': 'cpu'},
-                                        encode_kwargs = {'normalize_embeddings': False})
-    vectorstore = FAISS.load_local(
-        "app/api/data/FAISSvectorstore", 
-        embedding_model,
-        allow_dangerous_deserialization=True
-    )
-    logger.info("Successfully loaded embeddings and vector store")
-except Exception as e:
-    logger.error(f"Error initializing embeddings or vector store: {str(e)}")
-    raise
-
-llm = ChatGroq(model = "llama3-8b-8192", api_key = GROQ_API_KEY, temperature = 0.6)
-retriever = vectorstore.as_retriever(search_kwargs={"k": 10},score_threshold = 0.6,search_type ="similarity" )
-
-QA_chain = RetrievalQA.from_chain_type(
-    llm = llm,
-    retriever=retriever,
-    return_source_documents=True,
-    verbose = True
-)
+# QA_CHAIN = initialize_models()
 
 @router.post("/Hello")
 async def hello_world():
@@ -91,6 +105,19 @@ def format_response(response_docs):
     return results
 
 
+MAX_RETRIES = 3
+QA_CHAIN = None
+
+for attempt in range(MAX_RETRIES):
+    try:
+        QA_CHAIN = initialize_models()
+        break
+    except Exception as e:
+        logger.error(f"Attempt {attempt + 1} failed: {str(e)}")
+        if attempt == MAX_RETRIES - 1:
+            logger.error("All initialization attempts failed")
+            raise
+
 @router.post("/recommendations/", response_model=RecommendationResponse)
 async def get_recommendations(query: Query):
     system_prompt = (
@@ -104,7 +131,12 @@ async def get_recommendations(query: Query):
     )
     try:
         logger.debug(f"Received query: {query.query} with history: {query.history}")
-        response = QA_chain.invoke({
+        if QA_CHAIN is None:
+            raise HTTPException(
+            status_code=503,
+            detail="Service unavailable - Model initialization failed"
+            )
+        response = QA_CHAIN.invoke({
         "query": system_prompt + "\n" + query.query,
     })
         logger.debug(f"Response from QA: {response}")
