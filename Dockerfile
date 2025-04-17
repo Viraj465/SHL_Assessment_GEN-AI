@@ -10,8 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Install Node.js 22.x and npm for the React frontend as root
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g npm@latest \
-    && npm install -g axios
+    && npm install -g npm@latest
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser
@@ -38,13 +37,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Build frontend
 WORKDIR /app/my-app
-RUN if [ -f "package.json" ]; then \
-    npm install --legacy-peer-deps && \
-    npm run build; \
-    else \
-    echo "No package.json found in /my-app"; \
-    exit 1; \
-    fi
+RUN npm install --legacy-peer-deps && \
+    npm install react-scripts --legacy-peer-deps && \
+    npm run build
 
 # Move back to main directory and set up static files
 WORKDIR /app
