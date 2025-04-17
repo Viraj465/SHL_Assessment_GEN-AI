@@ -1,7 +1,10 @@
 # Base image
 FROM python:3.11
+# Create a non-root user
+RUN adduser --disabled-password --gecos '' appuser
+USER appuser
 
-# Set working directory for backend
+# Set working directory with appropriate permissions
 WORKDIR /app
 
 # Install system dependencies
@@ -26,8 +29,9 @@ COPY app.py route.py answers.json ./
 # COPY README.md  ./
 
 # Copy frontend files to /my-app
-WORKDIR /my-app
-COPY my-app/ ./
+COPY my-app/ ./my-app/
+
+WORKDIR /app/my-app
 
 # Now build the frontend
 RUN if [ -f "package.json" ]; then \
@@ -40,6 +44,8 @@ RUN if [ -f "package.json" ]; then \
 
 # Move back to main directory
 WORKDIR /app
+RUN mkdir -p static
+RUN cp -r my-app/build/* static/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
