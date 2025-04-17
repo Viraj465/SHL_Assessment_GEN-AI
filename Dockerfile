@@ -33,7 +33,9 @@ RUN mkdir -p /home/appuser/.npm && \
 USER appuser
 
 # Install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
 
 # Build frontend
 WORKDIR /app/my-app
