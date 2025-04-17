@@ -13,6 +13,11 @@ import logging
 import tempfile
 import shutil
 
+os.system("apt-get update && apt-get install git-lfs -y")
+os.system("git lfs install")
+os.system("git lfs pull")
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
