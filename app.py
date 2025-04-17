@@ -4,10 +4,6 @@ from fastapi.staticfiles import StaticFiles
 from route import router
 import os
 
-os.system("apt-get update && apt-get install git-lfs -y")
-os.system("git lfs install")
-os.system("git lfs pull")
-
 app = FastAPI(
     title="SHL Assessment Recommendation System API",
     description="API for recommending SHL assessments",
