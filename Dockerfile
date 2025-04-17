@@ -1,7 +1,10 @@
 # Base image
 FROM python:3.11
+# Create a non-root user
+RUN adduser --disabled-password --gecos '' appuser
+USER appuser
 
-# Set working directory for backend
+# Set working directory with appropriate permissions
 WORKDIR /app
 
 # Install system dependencies

@@ -26,19 +26,38 @@ if not GROQ_API_KEY:
 router = APIRouter()
 
 
-CACHE_DIR = tempfile.mkdtemp()
+CACHE_DIR = tempfile.mkdtemp(prefix='huggingface_')
 os.environ['TRANSFORMERS_CACHE'] = CACHE_DIR
 os.environ['HF_HOME'] = CACHE_DIR
+
+def cleanup_cache():
+    try:
+        shutil.rmtree(CACHE_DIR)
+    except Exception as e:
+        logger.error(f"Error cleaning up cache directory: {str(e)}")
 
 FAISS_INDEX_PATH = hf_hub_download(
     repo_id="Viraj0112/SHL_Assessment",
     filename="app/api/data/FAISSvectorstore/index.faiss",
-    repo_type="space"
+    repo_type="space",
+    cache_dir=CACHE_DIR,
+)
+
+FAISS_PKL_PATH = hf_hub_download(
+    repo_id="Viraj0112/SHL_Assessment",
+    filename="app/api/data/FAISSvectorstore/index.pkl",
+    repo_type="space",
+    cache_dir=CACHE_DIR,
 )
 FAISS_STORE_FOLDER = os.path.dirname(FAISS_INDEX_PATH)
 
+def check_files_exist():
+    if not (os.path.exists(FAISS_INDEX_PATH) and os.path.exists(FAISS_PKL_PATH)):
+        raise FileNotFoundError("Required FAISS files not found")
+    
 def initialize_models():
     try:
+        check_files_exist()
         embedding_model = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-mpnet-base-v2",
             model_kwargs={'device': 'cpu'},
