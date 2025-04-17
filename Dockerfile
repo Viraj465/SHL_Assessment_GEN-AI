@@ -1,27 +1,37 @@
 # Base image
 FROM python:3.11
-# Create a non-root user
-RUN adduser --disabled-password --gecos '' appuser
-USER appuser
 
-# Set working directory with appropriate permissions
-WORKDIR /app
-
-# Install system dependencies
+# Install system dependencies as root
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 22.x and npm for the React frontend
+# Install Node.js 22.x and npm for the React frontend as root
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest \
     && npm install -g axios
 
-# Copy backend requirements and install Python dependencies
-COPY requirements.txt .
+# Create a non-root user
+RUN adduser --disabled-password --gecos '' appuser
+
+# Set working directory with appropriate permissions
+WORKDIR /app
+RUN chown appuser:appuser /app
+
+# Copy and install Python dependencies
+COPY --chown=appuser:appuser requirements.txt .
+
+# Switch to non-root user
+USER appuser
+
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy files with correct ownership
+COPY --chown=appuser:appuser app/ ./app/
+COPY --chown=appuser:appuser app.py route.py answers.json ./
+COPY --chown=appuser:appuser my-app/ ./my-app/
 
 # Copy backend files to /app
 COPY app/ ./app/
