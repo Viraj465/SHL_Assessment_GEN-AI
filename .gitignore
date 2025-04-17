@@ -51,7 +51,6 @@ yarn-error.log*
 */.ipynb_checkpoints/*
 
 # FAISS
-*.faiss
 vectorstore/
 
 # Misc
