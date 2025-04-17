@@ -17,3 +17,4 @@ typing
 sentence-transformers
 tabulate
 langchain_experimental
+huggingface_hub
