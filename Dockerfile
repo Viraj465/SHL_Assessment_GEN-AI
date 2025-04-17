@@ -20,30 +20,24 @@ RUN adduser --disabled-password --gecos '' appuser
 WORKDIR /app
 RUN chown appuser:appuser /app
 
-# Copy and install Python dependencies
+# Copy application files with correct ownership
 COPY --chown=appuser:appuser requirements.txt .
-
-# Switch to non-root user
-USER appuser
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy files with correct ownership
 COPY --chown=appuser:appuser app/ ./app/
 COPY --chown=appuser:appuser app.py route.py answers.json ./
 COPY --chown=appuser:appuser my-app/ ./my-app/
 
-# Copy backend files to /app
-COPY app/ ./app/
-COPY app.py route.py answers.json ./
-# COPY README.md  ./
+# Set npm cache directory with correct permissions
+RUN mkdir -p /home/appuser/.npm && \
+    chown -R appuser:appuser /home/appuser/.npm
 
-# Copy frontend files to /my-app
-COPY my-app/ ./my-app/
+# Switch to non-root user
+USER appuser
 
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Build frontend
 WORKDIR /app/my-app
-
-# Now build the frontend
 RUN if [ -f "package.json" ]; then \
     npm install --legacy-peer-deps && \
     npm run build; \
@@ -52,15 +46,15 @@ RUN if [ -f "package.json" ]; then \
     exit 1; \
     fi
 
-# Move back to main directory
+# Move back to main directory and set up static files
 WORKDIR /app
-RUN mkdir -p static
-RUN cp -r my-app/build/* static/
+RUN mkdir -p static && \
+    cp -r my-app/build/* static/
 
 # Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PORT=7860
-ENV HOST=0.0.0.0
+ENV PYTHONUNBUFFERED=1 \
+    PORT=7860 \
+    HOST=0.0.0.0
 
 # Expose the backend port
 EXPOSE 7860
