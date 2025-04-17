@@ -50,9 +50,6 @@ yarn-error.log*
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 
-# FAISS
-vectorstore/
-
 # Misc
 .DS_Store
 .env.local
