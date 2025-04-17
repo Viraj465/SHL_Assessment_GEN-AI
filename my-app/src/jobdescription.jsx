@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const JobDescriptionForm = () => {
+const JobDescription = () => {
     const [JobDescription, setJobDescription] = useState("");
     const [recommendation, setRecommendation] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -106,4 +106,4 @@ const JobDescriptionForm = () => {
     );
 };
 
-export default JobDescriptionForm;
+export default JobDescription;

@@ -1,9 +1,9 @@
-import JobDescriptionForm from './jobdescriptionforms';
+import JobDescription from "./jobdescription";
 
 function App() {
   return (
     <div className="App">
-      <JobDescriptionForm />
+      <JobDescription />
     </div>
   );
 }
