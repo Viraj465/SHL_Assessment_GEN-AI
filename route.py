@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import List,Optional
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+from huggingface_hub import hf_hub_download
 from langchain_groq.chat_models import ChatGroq
 from langchain.chains import  RetrievalQA
 import pandas as pd
@@ -10,6 +11,8 @@ from dotenv import load_dotenv
 import os
 import logging
 import tempfile
+import shutil
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,6 +31,13 @@ CACHE_DIR = tempfile.mkdtemp()
 os.environ['TRANSFORMERS_CACHE'] = CACHE_DIR
 os.environ['HF_HOME'] = CACHE_DIR
 
+FAISS_INDEX_PATH = hf_hub_download(
+    repo_id="Viraj0112/SHL_Assessment",
+    filename="app/api/data/FAISSvectorstore/index.faiss",
+    repo_type="space"
+)
+FAISS_STORE_FOLDER = os.path.dirname(FAISS_INDEX_PATH)
+
 def initialize_models():
     try:
         embedding_model = HuggingFaceEmbeddings(
@@ -36,7 +46,7 @@ def initialize_models():
             encode_kwargs={'normalize_embeddings': False},
         )
         vectorstore = FAISS.load_local(
-            "app/api/data/FAISSvectorstore",
+            FAISS_STORE_FOLDER,
             embedding_model,
             allow_dangerous_deserialization=True
         )
