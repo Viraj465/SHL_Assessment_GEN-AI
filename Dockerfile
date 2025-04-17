@@ -38,7 +38,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Build frontend
 WORKDIR /app/my-app
 RUN npm install --legacy-peer-deps && \
-    npm install react-scripts --legacy-peer-deps && \
     npm run build
 
 # Move back to main directory and set up static files
