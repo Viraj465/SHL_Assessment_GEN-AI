@@ -13,11 +13,6 @@ import logging
 import tempfile
 import shutil
 
-os.system("apt-get update && apt-get install git-lfs -y")
-os.system("git lfs install")
-os.system("git lfs pull")
-
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -47,10 +42,22 @@ FAISS_INDEX_PATH = hf_hub_download(
     repo_type="space",
     cache_dir=CACHE_DIR,
 )
+
+FAISS_PKL_PATH = hf_hub_download(
+    repo_id="Viraj0112/SHL_Assessment",
+    filename="app/api/data/FAISSvectorstore/index.pkl",
+    repo_type="space",
+    cache_dir=CACHE_DIR,
+)
 FAISS_STORE_FOLDER = os.path.dirname(FAISS_INDEX_PATH)
 
+def check_files_exist():
+    if not (os.path.exists(FAISS_INDEX_PATH) and os.path.exists(FAISS_PKL_PATH)):
+        raise FileNotFoundError("Required FAISS files not found")
+    
 def initialize_models():
     try:
+        check_files_exist()
         embedding_model = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-mpnet-base-v2",
             model_kwargs={'device': 'cpu'},
