@@ -11,9 +11,26 @@ pinned: false
 
 # SHL Assessment Application
 
-FastAPI and React-based application for SHL assessment recommendations.
+A sophisticated FastAPI and React-based application for providing SHL assessment recommendations using AI.
+
+## Features
+- AI-powered assessment recommendations
+- Interactive user interface built with React
+- FastAPI backend for efficient data processing
+- FAISS vector store for similarity search
+- Docker containerization for easy deployment
 
 ## Project Structure
+```
+SHLapp/
+├── app/                    # Main application directory
+│   ├── api/               # FastAPI backend
+│   │   ├── data/         # Data files and vector stores
+│   │   └── routes/       # API endpoints
+│   └── frontend/         # React frontend
+├── Dockerfile            # Docker configuration
+└── requirements.txt      # Python dependencies
+```
 
 [Project structure documentation]
 

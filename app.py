@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from route import router
 import os
 
+
 app = FastAPI(
     title="SHL Assessment Recommendation System API",
     description="API for recommending SHL assessments",
