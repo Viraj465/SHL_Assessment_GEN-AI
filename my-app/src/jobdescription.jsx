@@ -17,10 +17,10 @@ const JobDescription = () => {
     setLoading(true);
     setError(null);
 
-    console.log("Submitting to:", `${API_URL}/api/recommendations`);
+    console.log("Submitting to:", `${API_URL}/api/recommendations/`);
 
     try {
-      const response = await fetch(`${API_URL}/api/recommendations`, {
+      const response = await fetch(`${API_URL}/api/recommendations/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
