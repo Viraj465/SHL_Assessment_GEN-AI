@@ -40,6 +40,7 @@ const JobDescription = () => {
 
       const data = await response.json();
       console.log("Response data:", data);
+      console.log("Recommendations:", data.recommendations);
 
       if (!data.recommendations) {
         throw new Error("No recommendations in response");
@@ -83,23 +84,23 @@ const JobDescription = () => {
             <div className="recommendations-grid">
               {recommendation.map((item, index) => (
                 <div key={index} className="recommendation-card">
-                  <h3>{item.Assessment_Name}</h3>
+                  <h3>{item.assessment_name}</h3>
                   <div className="card-content">
                     <p>
-                      <strong>Test Type:</strong> {item.Test_Type}
+                      <strong>Test Type:</strong> {item.test_type}
                     </p>
                     <p>
-                      <strong>Duration:</strong> {item.Duration}
+                      <strong>Duration:</strong> {item.duration}
                     </p>
                     <p>
-                      <strong>Remote Support:</strong> {item.Remote_Support}
+                      <strong>Remote Support:</strong> {item.remote_support}
                     </p>
                     <p>
-                      <strong>Adaptive Support:</strong> {item.Adaptive_Support}
+                      <strong>Adaptive Support:</strong> {item.adaptive_support}
                     </p>
                     {item.URL && (
                       <a
-                        href={item.URL}
+                        href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
