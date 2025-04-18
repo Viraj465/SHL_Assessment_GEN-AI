@@ -9,7 +9,7 @@ const JobDescription = () => {
 
     const API_URL =
         process.env.NODE_ENV === "production"
-            ? "https://viraj0112-shl-assessment.hf.space"
+            ? "https://huggingface.co/spaces/Viraj0112/SHL_Assessment"
             : "http://localhost:7860";
 
     const handleSubmit = async (e) => {
@@ -18,25 +18,30 @@ const JobDescription = () => {
         setError(null);
 
         try {
-            const response = await fetch(`${API_URL}/api/recommend`, {
+            const response = await fetch(`${API_URL}/api/recommendations`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     job_description: JobDescription,
+                    history:[]
                 }),
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorData}`);
             }
 
             const data = await response.json();
+            if (!data.recommendations) {
+                throw new Error('No recommendations in response');
+            }
             setRecommendation(data.recommendations || []);
         } catch (error) {
             console.error("Error fetching recommendation:", error);
-            setError("Failed to get recommendations. Please try again.");
+            setError(`Failed to get recommendations. Please try again., ${error.message}`);
         } finally {
             setLoading(false);
         }

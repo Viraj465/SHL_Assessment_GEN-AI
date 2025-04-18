@@ -181,6 +181,7 @@ async def get_recommendations(query: Query):
             for meta in [doc.metadata]
         ][:10]
         
+        logger.info(f"Returning {len(recommendations)} recommendations")
         return RecommendationResponse(
             answer=response["result"],
             recommendations=recommendations )
