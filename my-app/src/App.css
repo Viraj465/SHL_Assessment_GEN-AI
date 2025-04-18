@@ -70,7 +70,7 @@ button:disabled {
 
 .recommendation-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .recommendation-card h3 {
@@ -110,11 +110,10 @@ footer {
 
 @media (max-width: 768px) {
   .container {
-      padding: 1rem;
+    padding: 1rem;
   }
-  
   .recommendations-grid {
-      grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
 }
 

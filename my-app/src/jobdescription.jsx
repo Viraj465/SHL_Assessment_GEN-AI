@@ -80,36 +80,6 @@ const JobDescription = () => {
         {recommendation.length > 0 && (
           <div className="results">
             <h2>Recommended Assessments:</h2>
-            {/* <div className="recommendations-grid">
-              {recommendation.map((item, index) => (
-                <div key={index} className="recommendation-card">
-                  <h3>{item.assessment_name}</h3>
-                  <div className="card-content">
-                    <p>
-                      <strong>Test Type:</strong> {item.test_type}
-                    </p>
-                    <p>
-                      <strong>Duration:</strong> {item.duration}
-                    </p>
-                    <p>
-                      <strong>Remote Support:</strong> {item.remote_support}
-                    </p>
-                    <p>
-                      <strong>Adaptive Support:</strong> {item.adaptive_support}
-                    </p>
-                    {item.URL && (
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Learn More
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div> */}
             <table className="recommendation-table">
               <thead>
                 <tr>
@@ -159,8 +129,8 @@ const JobDescription = () => {
       </div>
 
       <footer>
-        <p>Developed by Viraj</p>
-        <p>© 2024 All rights reserved.</p>
+        <p>Developed by Viraj. SHL Assessment Test.</p>
+        <p>© 2025 All rights reserved.</p>
       </footer>
     </div>
   );
