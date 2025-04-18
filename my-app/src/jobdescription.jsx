@@ -45,8 +45,7 @@ const JobDescription = () => {
       if (!data.recommendations) {
         throw new Error("No recommendations in response");
       }
-    //   setRecommendation(data.recommendations || []);
-    setRecommendation(data.recommendations);
+      setRecommendation(data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendation:", error);
       setError(
@@ -81,7 +80,7 @@ const JobDescription = () => {
         {recommendation.length > 0 && (
           <div className="results">
             <h2>Recommended Assessments:</h2>
-            <div className="recommendations-grid">
+            {/* <div className="recommendations-grid">
               {recommendation.map((item, index) => (
                 <div key={index} className="recommendation-card">
                   <h3>{item.assessment_name}</h3>
@@ -110,7 +109,43 @@ const JobDescription = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
+            <table className="recommendation-table">
+              <thead>
+                <tr>
+                  <th>Assessment Name</th>
+                  <th>Test Type</th>
+                  <th>Duration</th>
+                  <th>Remote Support</th>
+                  <th>Adaptive Support</th>
+                  <th>Learn More</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recommendation.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.assessment_name}</td>
+                    <td>{item.test_type}</td>
+                    <td>{item.duration}</td>
+                    <td>{item.remote_support}</td>
+                    <td>{item.adaptive_support}</td>
+                    <td>
+                      {item.url ? (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Link
+                        </a>
+                      ) : (
+                        "N/A"
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 

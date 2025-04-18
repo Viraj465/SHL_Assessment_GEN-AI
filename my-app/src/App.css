@@ -117,3 +117,37 @@ footer {
       grid-template-columns: 1fr;
   }
 }
+
+.recommendation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.recommendation-table th,
+.recommendation-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+.recommendation-table th {
+  background-color: #f2f2f2;
+  color: #007bff;
+}
+
+.recommendation-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.recommendation-table a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.recommendation-table a:hover {
+  text-decoration: underline;
+}
