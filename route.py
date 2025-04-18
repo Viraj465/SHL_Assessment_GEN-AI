@@ -88,7 +88,7 @@ def initialize_models():
     
 class Query(BaseModel):
     query: str
-    history: list = []
+    history: List[str] = []
 
 class Recommendation(BaseModel):
     assessment_name: str
@@ -146,7 +146,7 @@ for attempt in range(MAX_RETRIES):
             logger.error("All initialization attempts failed")
             raise
 
-@router.post("/recommendations/", response_model=RecommendationResponse)
+@router.post("/recommendations", response_model=RecommendationResponse)
 async def get_recommendations(query: Query):
     system_prompt = (
     "Based on the following requirements, analyze the retrieved assessment documents and recommend "
@@ -181,6 +181,7 @@ async def get_recommendations(query: Query):
             for meta in [doc.metadata]
         ][:10]
         
+        logger.info(f"Returning {len(recommendations)} recommendations")
         return RecommendationResponse(
             answer=response["result"],
             recommendations=recommendations )
